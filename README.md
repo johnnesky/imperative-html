@@ -1,2 +1,3 @@
 # imperative-html
-Write HTML in JavaScript.
+
+imperative-html is a (client-side) JavaScript library for creating HTML (and SVG) elements.
