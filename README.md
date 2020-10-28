@@ -107,7 +107,7 @@ SVG.linearGradient(), // returns <linearGradient></linearGradient>
 SVG.color_profile(), // returns <color-profile></color-profile>
 ```
 
-Note that if your viewers are using Internet Explorer, using *imperative-html* to create custom elements will not work, not will it gracefully degrade. If you want to support Internet Explorer, or you just want to receive error messages if you mistype an element name, you can instead load a strict version of *imperative-html* that does not include support for custom elements: 
+Note that if your viewers are using Internet Explorer, using *imperative-html* to create custom elements will not work, nor will it gracefully degrade. If you want to support Internet Explorer, or you just want to receive error messages if you mistype an element name, you can instead load a strict version of *imperative-html* that does not include support for custom elements: 
 
 ```javascript
 <script src="https://cdn.jsdelivr.net/npm/imperative-html@0.0/dist/global/elements-strict.min.js"></script>
@@ -178,7 +178,7 @@ This script adds the function `translateElementsToImperativeCode()` to the globa
 ```javascript
 translateElementsToImperativeCode(div());
 // -> "HTML.div()"
-translateElementsToImperativeCode('<a href="#">Here</a>', "\t");
+translateElementsToImperativeCode('<a href="#">Here</a>', "  ");
 // -> `HTML.a({href: "#"},
 //      "Here",
 //    )`
@@ -209,4 +209,4 @@ The NPM package includes type declarations for [TypeScript](https://www.typescri
 
 *imperative-html* generally supports Internet Explorer, aside from custom element names [as noted above](#custom-elements). Future versions of *imperative-html* might not support Internet Explorer, but if you specify the current version number when you load the script [as instructed](#getting-started), then your page will continue to load this version and will be safe from breaking changes.
 
-Note that many features of modern JavaScript are not supported in Internet Explorer, so if you need to support it, make sure to transpile your own code using something like [Babel](https://babeljs.io/) or [TypeScript](https://www.typescriptlang.org/). Fortunately, only about 2% of all internet traffic still comes from Internet Explorer at this time, so if you're not a commercial business and you're not sure if you need to worry about it, you probably don't. 
+Note that many features of modern JavaScript do not work in Internet Explorer, so if you need to support it, make sure to transpile your own code using something like [Babel](https://babeljs.io/) or [TypeScript](https://www.typescriptlang.org/). Fortunately, only about 2% of all internet traffic still comes from Internet Explorer at this time, so if you're not a commercial business and you're not sure if you need to worry about it, you probably don't. 
