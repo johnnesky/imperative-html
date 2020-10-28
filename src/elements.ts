@@ -128,6 +128,7 @@ interface SVGElementFactory {
 	circle(...args: Array<any>): SVGCircleElement;
 	clipPath(...args: Array<any>): SVGClipPathElement;
 	"color-profile"(...args: Array<any>): SVGElement;
+	color_profile(...args: Array<any>): SVGElement;
 	cursor(...args: Array<any>): SVGElement;
 	defs(...args: Array<any>): SVGDefsElement;
 	desc(...args: Array<any>): SVGDescElement;
@@ -161,10 +162,15 @@ interface SVGElementFactory {
 	filter(...args: Array<any>): SVGFilterElement;
 	font(...args: Array<any>): SVGElement;
 	"font-face"(...args: Array<any>): SVGElement;
+	font_face(...args: Array<any>): SVGElement;
 	"font-face-format"(...args: Array<any>): SVGElement;
+	font_face_format(...args: Array<any>): SVGElement;
 	"font-face-name"(...args: Array<any>): SVGElement;
+	font_face_name(...args: Array<any>): SVGElement;
 	"font-face-src"(...args: Array<any>): SVGElement;
+	font_face_src(...args: Array<any>): SVGElement;
 	"font-face-uri"(...args: Array<any>): SVGElement;
+	font_face_uri(...args: Array<any>): SVGElement;
 	foreignObject(...args: Array<any>): SVGForeignObjectElement;
 	g(...args: Array<any>): SVGGElement;
 	glyph(...args: Array<any>): SVGElement;
@@ -177,6 +183,7 @@ interface SVGElementFactory {
 	mask(...args: Array<any>): SVGMaskElement;
 	metadata(...args: Array<any>): SVGMetadataElement;
 	"missing-glyph"(...args: Array<any>): SVGElement;
+	missing_glyph(...args: Array<any>): SVGElement;
 	mpath(...args: Array<any>): SVGElement;
 	path(...args: Array<any>): SVGPathElement;
 	pattern(...args: Array<any>): SVGPatternElement;
@@ -210,14 +217,15 @@ if (typeof Proxy !== "undefined") {
 
 	HTML = <HTMLElementFactory> <unknown> new Proxy(parseHTML, {
 		get: function(target: any, name: string) {
-			const kebabCaseName = name.replace(uppercasePattern, (c: string) => "-" + c.toLowerCase()).replace(/^-/, "");
+			const kebabCaseName = name.replace(uppercasePattern, (c: string) => "-" + c.toLowerCase()).replace(/^-/, "").replace(/_/g, "-");
 			return (...args: Array<any>) => applyElementArgs(document.createElement(kebabCaseName), args);
 		},
 	});
 
 	SVG = <SVGElementFactory> <unknown> new Proxy(parseSVG, {
 		get: function(target: any, name: string) {
-			return (...args: Array<any>) => applyElementArgs(<SVGElement> document.createElementNS(svgNS, name), args);
+			const kebabCaseName = name.replace(/_/g, "-");
+			return (...args: Array<any>) => applyElementArgs(<SVGElement> document.createElementNS(svgNS, kebabCaseName), args);
 		},
 	});
 } else {
@@ -227,5 +235,9 @@ if (typeof Proxy !== "undefined") {
 	}
 	for (const name of "a altGlyph altGlyphDef altGlyphItem animate animateMotion animateTransform circle clipPath color-profile cursor defs desc discard ellipse feBlend feColorMatrix feComponentTransfer feComposite feConvolveMatrix feDiffuseLighting feDisplacementMap feDistantLight feDropShadow feFlood feFuncA feFuncB feFuncG feFuncR feGaussianBlur feImage feMerge feMergeNode feMorphology feOffset fePointLight feSpecularLighting feSpotLight feTile feTurbulence filter font font-face font-face-format font-face-name font-face-src font-face-uri foreignObject g glyph glyphRef hkern image line linearGradient marker mask metadata missing-glyph mpath path pattern polygon polyline radialGradient rect script set stop style svg switch symbol text textPath title tref tspan use view vkern".split(" ")) {
 		(<any>SVG)[name] = (...args: Array<any>) => applyElementArgs(<SVGElement> document.createElementNS(svgNS, name), args);
+		if (/-/.test(name)) {
+			const snakeCaseName = name.replace(/-/g, "_");
+			(<any>SVG)[snakeCaseName] = (...args: Array<any>) => applyElementArgs(<SVGElement> document.createElementNS(svgNS, name), args);
+		}
 	}
 }

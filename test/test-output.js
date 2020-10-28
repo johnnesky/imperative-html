@@ -76,14 +76,24 @@ const strictElementsScript = fs.readFileSync("dist/global/elements-strict.min.js
 				`HTML.fakeelement("Hello world!")`,
 				`<fakeelement>Hello world!</fakeelement>`);
 		},
-		makeCustomElementHandlesCasing: async function() {
+		makeCustomElementCamelCase: async function() {
 			await assertExpressionOutput(
 				`HTML.myElement("Hello world!")`,
+				`<my-element>Hello world!</my-element>`);
+		},
+		makeCustomElementSnakeCase: async function() {
+			await assertExpressionOutput(
+				`HTML.my_element("Hello world!")`,
 				`<my-element>Hello world!</my-element>`);
 		},
 		makeCustomElementHandlesInitialCasing: async function() {
 			await assertExpressionOutput(
 				`HTML.MyElement("Hello world!")`,
+				`<my-element>Hello world!</my-element>`);
+		},
+		makeCustomElementSnakeCase: async function() {
+			await assertExpressionOutput(
+				`HTML.my_element("Hello world!")`,
 				`<my-element>Hello world!</my-element>`);
 		},
 		strictDoesSupportStandardElement: async function() {
@@ -96,9 +106,14 @@ const strictElementsScript = fs.readFileSync("dist/global/elements-strict.min.js
 				`typeof HTML.fakeelement`,
 				`undefined`);
 		},
-		strictDoesNotSupportCustomElement: async function() {
+		strictDoesNotSupportCamelCase: async function() {
 			await assertStrictExpressionOutput(
 				`typeof HTML.myElement`,
+				`undefined`);
+		},
+		strictDoesNotSupportSnakeCase: async function() {
+			await assertStrictExpressionOutput(
+				`typeof HTML.my_element`,
 				`undefined`);
 		},
 		handlesPlainString: async function() {
@@ -237,10 +252,15 @@ const strictElementsScript = fs.readFileSync("dist/global/elements-strict.min.js
 			await page.evaluate(() => applyToElement(document.getElementById("testDiv"), {hidden: true}, "World!"));
 			assert.equal(await getBodyInnerHTML(), `<div id="testDiv" hidden="">Hello World!</div>`);
 		},
+		applyToDocumentFragmentAddsStuff: async function() {
+			await assertExpressionOutput(
+				`applyToElement(HTML("Hello "), "World!")`,
+				`Hello World!`);
+		},
 		applyToElementWarnsAboutType: async function() {
 			await runScriptInBody("");
 			await page.evaluate(() => applyToElement(0, "test"));
-			expectConsoleWarning("Couldn't apply to provided argument because it's not an element.");
+			expectConsoleWarning("Couldn't apply to provided argument because it's not an element or DocumentFragment.");
 		},
 		setAttributeToObject: async function() {
 			await assertExpressionOutput(
@@ -277,10 +297,20 @@ const strictElementsScript = fs.readFileSync("dist/global/elements-strict.min.js
 				`SVG["color-profile"]()`,
 				`<color-profile></color-profile>`);
 		},
+		svgSnakeCase: async function() {
+			await assertExpressionOutput(
+				`SVG.color_profile("Hello World!")`,
+				`<color-profile>Hello World!</color-profile>`);
+		},
 		svgFakeElement: async function() {
 			await assertExpressionOutput(
 				`SVG.fakeelement()`,
 				`<fakeelement></fakeelement>`);
+		},
+		strictSvgSupportsSnakeCase: async function() {
+			await assertStrictExpressionOutput(
+				`SVG.color_profile("Hello World!")`,
+				`<color-profile>Hello World!</color-profile>`);
 		},
 		strictSvgDoesNotSupportFakeElement: async function() {
 			await assertStrictExpressionOutput(

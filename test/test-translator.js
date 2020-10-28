@@ -205,11 +205,25 @@ const translatorScript = fs.readFileSync("dist/global/translator.min.js", "utf8"
 				`HTML.customName()`
 			);
 		},
+		handlesReservedHTMLElementName: async function() {
+			await assertTranslationOutput(
+				`<var></var>`,
+				`HTML["var"]()`
+			);
+		},
+		handlesReservedSVGElementName: async function() {
+			await assertTranslationOutput(
+				`<svg><switch></switch></svg>`,
+				`SVG.svg(\n` +
+				`	SVG["switch"](),\n` +
+				`)`
+			);
+		},
 		handlesKebabCaseSVGElementName: async function() {
 			await assertTranslationOutput(
 				`<svg><color-profile></color-profile></svg>`,
 				`SVG.svg(\n` +
-				`	SVG["color-profile"](),\n` +
+				`	SVG.color_profile(),\n` +
 				`)`
 			);
 		},
@@ -223,8 +237,8 @@ const translatorScript = fs.readFileSync("dist/global/translator.min.js", "utf8"
 		},
 		handlesInvalidIdentifierElementName: async function() {
 			await assertTranslationOutput(
-				`<fake-></fake->`,
-				`HTML["fake-"]()`
+				`<fake*></fake*>`,
+				`HTML["fake*"]()`
 			);
 		},
 		handlesInvalidIdentifierAttributeName: async function() {

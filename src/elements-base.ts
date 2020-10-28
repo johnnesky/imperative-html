@@ -106,12 +106,16 @@ export function replaceScriptWith(...args: Array<any>): void {
 			return;
 		}
 	}
-	currentScript.parentNode!.replaceChild(applyElementArgs(document.createDocumentFragment(), args), currentScript);
+	if (currentScript.parentNode === null) {
+		console.warn("Couldn't replace script element because it is not attached to a parent anymore, did you try to replace the same script more than once?");
+		return;
+	}
+	currentScript.parentNode.replaceChild(applyElementArgs(document.createDocumentFragment(), args), currentScript);
 }
 
 export function applyToElement<T extends HTMLElement | SVGElement | DocumentFragment>(element: T, ...args: Array<any>): T {
-	if (!(element instanceof Element)) {
-		console.warn("Couldn't apply to provided argument because it's not an element.");
+	if (!(element instanceof Element || element instanceof DocumentFragment)) {
+		console.warn("Couldn't apply to provided argument because it's not an element or DocumentFragment.");
 		return element;
 	}
 	return applyElementArgs(element, args);

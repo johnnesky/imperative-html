@@ -17,8 +17,10 @@ import {HTML, SVG, replaceScriptWith, applyToElement} from "../";
 
 {let _: HTMLElement = HTML.fakeelement();}
 {let _: HTMLElement = HTML.customElement();}
+{let _: HTMLElement = HTML.custom_element();}
 {let _: SVGElement = SVG.fakeelement();}
 {let _: SVGElement = SVG.camelCaseElement();}
+{let _: SVGElement = SVG.snake_case_element();}
 {let _: SVGElement = SVG["kebab-case-element"]();}
 
 {let _: HTMLDivElement = HTML.div(

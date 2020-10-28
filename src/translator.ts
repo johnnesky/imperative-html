@@ -3,6 +3,8 @@
 // Simplified, but covers most cases I care about:
 const validJavascriptIdentifier: RegExp = /^[a-z][a-zA-z0-9_]*$/;
 
+const reservedJavascriptIdentifiers: {[key: string]: boolean} = {"abstract": true, "arguments": true, "await": true, "boolean": true, "break": true, "byte": true, "case": true, "catch": true, "char": true, "class": true, "const": true, "continue": true, "debugger": true, "default": true, "delete": true, "do": true, "double": true, "else": true, "enum": true, "eval": true, "export": true, "extends": true, "false": true, "final": true, "finally": true, "float": true, "for": true, "function": true, "goto": true, "if": true, "implements": true, "import": true, "in": true, "instanceof": true, "int": true, "interface": true, "let": true, "long": true, "native": true, "new": true, "null": true, "package": true, "private": true, "protected": true, "public": true, "return": true, "short": true, "static": true, "super": true, "switch": true, "synchronized": true, "this": true, "throw": true, "throws": true, "transient": true, "true": true, "try": true, "typeof": true, "var": true, "void": true, "volatile": true, "while": true, "with": true, "yield": true};
+
 // Converts a text node to a string, trimming away leading and trailing whitespace.
 // If the string contains tabs or newlines, wrap it in backticks, otherwise double quotes,
 // and escape the contents appropriately. 
@@ -31,14 +33,15 @@ function convertElementsRecursively(node: Element, indentLevel: number, indentTy
 	if (node instanceof HTMLElement) {
 		result += "HTML";
 		const elementName: string = node.tagName.toLowerCase();
-		const camelCaseName: string = elementName.replace(/-[a-z]/, (c) => c.slice(1).toUpperCase());
-		const validIdentifier: boolean = validJavascriptIdentifier.test(camelCaseName);
+		const camelCaseName: string = elementName.replace(/-[a-z]/, (c) => c.slice(1).toUpperCase()).replace(/-/g, "_");
+		const validIdentifier: boolean = validJavascriptIdentifier.test(camelCaseName) && !reservedJavascriptIdentifiers[camelCaseName];
 		result += validIdentifier ? ("." + camelCaseName) : ("[" + JSON.stringify(elementName) + "]");
 	} else if (node instanceof SVGElement) {
 		result += "SVG";
 		const elementName: string = node.tagName;
-		const validIdentifier: boolean = validJavascriptIdentifier.test(elementName);
-		result += validIdentifier ? ("." + elementName) : ("[" + JSON.stringify(elementName) + "]");
+		const snakeCaseName: string = elementName.replace(/-/g, "_");
+		const validIdentifier: boolean = validJavascriptIdentifier.test(snakeCaseName) && !reservedJavascriptIdentifiers[snakeCaseName];
+		result += validIdentifier ? ("." + snakeCaseName) : ("[" + JSON.stringify(elementName) + "]");
 	} else {
 		return indentation + "<Unrecognized node type>,\n";
 	}
