@@ -7,15 +7,15 @@ For example, you could run this JavaScript expression:
 
 ```javascript
 section(
-	h2("Title"),
-	p(
-		"Claim. ",
-		img({src: "persuasive-diagram.png"}),
-		a({href: "https://example.com"},
-			"Link to supporting evidence. ",
-		),
-		"Conclusion. ",
-	)
+  h2("Title"),
+  p(
+    "Claim. ",
+    img({src: "persuasive-diagram.png"}),
+    a({href: "https://example.com"},
+      "Link to supporting evidence. ",
+    ),
+    "Conclusion. ",
+  )
 )
 ```
 
@@ -23,15 +23,15 @@ And it would return a fully instantiated DOM element as if you had written:
 
 ```html
 <section>
-	<h2>Title</h2>
-	<p>
-		Claim.
-		<img src="persuasive-diagram.png"/>
-		<a href="https://example.com">
-			Link to supporting evidence.
-		</a>
-		Conclusion.
-	</p>
+  <h2>Title</h2>
+  <p>
+    Claim.
+    <img src="persuasive-diagram.png"/>
+    <a href="https://example.com">
+      Link to supporting evidence.
+    </a>
+    Conclusion.
+  </p>
 </section>
 ```
 
@@ -83,11 +83,11 @@ To make this easier, *imperative-html* also provides a function in the global sc
 ```html
 <p>Consider the following diagram:</p>
 <script>
-	replaceScriptWith(
-		SVG.svg({viewBox: "0 0 10 10"},
-			SVG.circle({cx: 5, cy: 5, r: 4, fill: "blue"}),
-		),
-	);
+  replaceScriptWith(
+    SVG.svg({viewBox: "0 0 10 10"},
+      SVG.circle({cx: 5, cy: 5, r: 4, fill: "blue"}),
+    ),
+  );
 </script>
 ```
 
@@ -125,12 +125,12 @@ p("Hello...", br, br, br, "...World!")
 
 ```javascript
 div(
-	"The first 10 squares are: ",
-	function*() {
-		for (var i = 0; i < 10; i++) {
-			yield div(i * i);
-		}
-	},
+  "The first 10 squares are: ",
+  function*() {
+    for (var i = 0; i < 10; i++) {
+      yield div(i * i);
+    }
+  },
 )
 ```
 
@@ -144,10 +144,10 @@ The class attribute also accepts arrays of strings, the style attribute also acc
 
 ```javascript
 div({
-	class: ["box", "round"],
-	style: {background: "white"},
-	hidden: true,
-	onclick: () => alert("Hi!"),
+  class: ["box", "round"],
+  style: {background: "white"},
+  hidden: true,
+  onclick: () => alert("Hi!"),
 })
 ```
 
@@ -163,7 +163,7 @@ In some cases, you may find it easier to write HTML without converting it to Jav
 
 ```javascript
 div(HTML(`
-	<p>Here's some HTML I copied from the internet.</p>
+  <p>Here's some HTML I copied from the internet.</p>
 `))
 ```
 
@@ -180,7 +180,7 @@ translateElementsToImperativeCode(div());
 // -> "HTML.div()"
 translateElementsToImperativeCode('<a href="#">Here</a>', "\t");
 // -> `HTML.a({href: "#"},
-//    	"Here",
+//      "Here",
 //    )`
 ```
 

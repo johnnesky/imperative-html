@@ -5,6 +5,16 @@
 	"author": "John Nesky",
 	"license": "MIT",
 	"homepage": "https://github.com/johnnesky/imperative-html#readme",
+	"keywords": [
+		"html",
+		"svg",
+		"javascript",
+		"element",
+		"browser",
+		"dom",
+		"imperative",
+		"convenience"
+	],
 	"type": "module",
 	"main": "dist/esm/elements.js",
 	"module": "dist/esm/elements.js",
