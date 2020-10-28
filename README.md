@@ -186,7 +186,7 @@ translateElementsToImperativeCode('<a href="#">Here</a>', "  ");
 
 ## NPM Support
 
-*imperative-html* requires a browser to run, so it can't be used as a server-side html template render. However, you may want to bundle it in your client-side code. You can add it to an [NPM](https://www.npmjs.com/) project like this:
+*imperative-html* requires a browser to run, so it can't be used as a server-side html template renderer. However, you may want to bundle it in your client-side code. You can add it to an [NPM](https://www.npmjs.com/) project like this:
 
 ```shell
 npm install imperative-html
@@ -209,4 +209,4 @@ The NPM package includes type declarations for [TypeScript](https://www.typescri
 
 *imperative-html* generally supports Internet Explorer, aside from custom element names [as noted above](#custom-elements). Future versions of *imperative-html* might not support Internet Explorer, but if you specify the current version number when you load the script [as instructed](#getting-started), then your page will continue to load this version and will be safe from breaking changes.
 
-Note that many features of modern JavaScript do not work in Internet Explorer, so if you need to support it, make sure to transpile your own code using something like [Babel](https://babeljs.io/) or [TypeScript](https://www.typescriptlang.org/). Fortunately, only about 2% of all internet traffic still comes from Internet Explorer at this time, so if you're not a commercial business and you're not sure if you need to worry about it, you probably don't. 
+Note that many features of modern JavaScript do not work in Internet Explorer, including features used in the code samples here, so if you need to support it, make sure to transpile your own code using something like [Babel](https://babeljs.io/) or [TypeScript](https://www.typescriptlang.org/). Fortunately, only about 2% of all internet traffic still comes from Internet Explorer at this time, so if you're not a commercial business and you're not sure if you need to worry about it, you probably don't. 
