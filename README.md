@@ -1,7 +1,7 @@
 
 # imperative-html
 
-*imperative-html* is a small JavaScript library for creating HTML (and SVG) elements in a web browser. It largely serves as a replacement for the standard [`document.createElement()` API](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement), allowing you to more easily create elements, assign attributes to them, and append children, all at once in a manner that resembles writing HTML but with JavaScript's syntax. 
+*imperative-html* is a small JavaScript library for creating HTML (and SVG) elements in a web browser. It largely serves as a replacement for the standard [`document.createElement()` API](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement), allowing you to more easily create elements, assign attributes, and append children in a manner that resembles writing HTML but with JavaScript's syntax. 
 
 For example, you could run this JavaScript expression:
 
@@ -15,7 +15,7 @@ section(
       "Link to supporting evidence. ",
     ),
     "Conclusion. ",
-  )
+  ),
 )
 ```
 
@@ -40,8 +40,8 @@ It doesn't take long to get used to writing HTML elements in JavaScript like thi
 ## Table of Contents
   * [Getting Started](#getting-started)
   * [Adding to the DOM](#adding-to-the-dom)
-  * [Custom Elements](#custom-elements)
   * [Arguments](#arguments)
+  * [Naming Convention](#naming-convention)
   * [Translation](#translation)
   * [NPM Support](#npm-support)
   * [TypeScript Support](#typescript-support)
@@ -52,27 +52,20 @@ It doesn't take long to get used to writing HTML elements in JavaScript like thi
 To use it, copy and paste this script near the top of your HTML page:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/imperative-html@0.0/dist/global/elements.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/imperative-html@0.1/dist/global/elements.min.js"></script>
 ```
 
-The script adds the symbols `HTML` and `SVG` to the global scope, and you can call functions such as `HTML.div()` on them to create elements. If you want to create multiple similar elements and you don't want to have to write `HTML.` before each element name, you can make shortcuts [in modern JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) for whatever element names you plan to use like this:
+The script adds the symbols `HTML` and `SVG` to the global scope, and you can call functions such as `HTML.div()` on them to create elements. If you want to create multiple similar elements and you don't want to have to write `HTML.` before each element name, you can easily make shortcuts [in modern JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) for whatever element names you plan to use like this:
 
 ```javascript
 HTML.div(); // returns <div></div>
 var {section, h1, h2, p, img, a, div} = HTML;
-div(); // returns <div></div>
-```
-
-There are a couple standard element names that are reserved JavaScript terms, but you can refer to them like this:
-
-```javascript
-HTML["var"](),
-SVG["switch"](),
+div();      // returns <div></div>
 ```
 
 ## Adding to the DOM
 
-As the name *imperative-html* [implies](https://en.wikipedia.org/wiki/Imperative_programming), it's not enough to declare elements, unlike HTML. You must also instruct the browser what to do with them. You probably want to append them to an existing element in the DOM, like:
+As the name *imperative-html* [implies](https://en.wikipedia.org/wiki/Imperative_programming), it's not enough to declare elements, unlike HTML. You must also tell the browser what to do with them. You probably want to append them to an existing element in the DOM, like:
 
 ```javascript
 document.body.appendChild(h1("Welcome."));
@@ -81,36 +74,15 @@ document.body.appendChild(h1("Welcome."));
 To make this easier, *imperative-html* also provides a function in the global scope called `replaceScriptWith()` that allows you to insert one or more elements into the DOM in place of the element that contains your code, like this:
 
 ```html
-<p>Consider the following diagram:</p>
-<script>
-  replaceScriptWith(
-    SVG.svg({viewBox: "0 0 10 10"},
-      SVG.circle({cx: 5, cy: 5, r: 4, fill: "blue"}),
-    ),
-  );
-</script>
-```
-
-## Custom Elements
-
-All of the standard HTML and SVG element types are supported, and you can also create custom elements. Note that in HTML, [custom elements are supposed to have at least one hyphen in the name](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements), like `<my-element></my-element>`.  Unfortunately, JavaScript doesn't allow hyphens in symbol names because they would be interpreted as the minus sign, so instead *imperative-html* allows you to use camelCase or snake_case symbols, and it will automatically convert the uppercase characters or underscores to kebab-case for you:
-
-```javascript
-HTML.myElement(), // returns <my-element></my-element>
-HTML.my_element(), // returns <my-element></my-element>
-```
-
-Some standard SVG element names have capital letters or hyphens, so for those you should use the same capitalization and write underscores instead of hyphens:
-
-```javascript
-SVG.linearGradient(), // returns <linearGradient></linearGradient>
-SVG.color_profile(), // returns <color-profile></color-profile>
-```
-
-Note that if your viewers are using Internet Explorer, using *imperative-html* to create custom elements will not work, nor will it gracefully degrade. If you want to support Internet Explorer, or you just want to receive error messages if you mistype an element name, you can instead load a strict version of *imperative-html* that does not include support for custom elements: 
-
-```javascript
-<script src="https://cdn.jsdelivr.net/npm/imperative-html@0.0/dist/global/elements-strict.min.js"></script>
+<p>
+  Welcome back,
+  <script>
+    replaceScriptWith(
+      img({src: "/avatar/" + username + ".jpg"}),
+      a({href: "/user/" + username}, displayName),
+    );
+  </script>
+</p>
 ```
 
 ## Arguments
@@ -134,7 +106,7 @@ div(
 )
 ```
 
-If you pass a JavaScript object literal as an argument, instead of being appended to the element as a child, it will be used for setting attributes on the new element. Write the attribute names and values as you would in HTML:
+If you pass a literal {object} as an argument, instead of being appended to the element as a child, it will be used for setting attributes on the new element. Write the attribute names and values as you would in HTML:
 
 ```javascript
 div({class: "box", id: "primaryBox", "data-size": 10})
@@ -154,7 +126,47 @@ div({
 *imperative-html* also provides a global function to apply arguments in the same manner to existing elements:
 
 ```javascript
-applyToElement(document.body, "That's all folks!", {hidden: true});
+applyToElement(document.body, "Now you're in control!", {contenteditable: true});
+```
+
+## Naming Convention
+
+All of the standard HTML and SVG element types are supported, and you can also create custom elements. Note that in HTML, [custom elements are supposed to have at least one hyphen in the name](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements), like `<my-element></my-element>`.  Unfortunately, JavaScript doesn't allow hyphens in names because they would be interpreted as a minus sign, so instead *imperative-html* allows you to use camelCase or snake_case symbols, and it will automatically convert them to kebab-case for you:
+
+```javascript
+HTML["my-element"](); // returns <my-element></my-element>
+HTML.myElement();     // returns <my-element></my-element>
+HTML.my_element();    // returns <my-element></my-element>
+```
+
+Some standard SVG element names have capital letters or hyphens, so for those you should use the same capitalization and write underscores instead of hyphens:
+
+```javascript
+SVG.linearGradient(); // returns <linearGradient></linearGradient>
+SVG.color_profile();  // returns <color-profile></color-profile>
+```
+
+There are also a couple standard element names that are reserved in JavaScript, but you can refer to them in various ways:
+
+```javascript
+// Calling the var method directly:
+HTML.var(); // returns <var></var>
+
+// Renaming it to a valid JavaScript symbol name:
+var htmlVar = HTML.var;
+htmlVar(); // returns <var></var>
+// or via destructuring:
+var {var: htmlVar} = HTML;
+htmlVar(); // returns <var></var>
+
+// The same options are available for SVG's switch:
+SVG.switch(); // returns <switch></switch>
+```
+
+Note that if your viewers are using Internet Explorer, using *imperative-html* to create custom elements will not work, nor will it gracefully degrade. If you want to support Internet Explorer, or you just want to receive error messages if you mistype an element name, you can instead load a strict version of *imperative-html* that does not include support for custom elements:
+
+```javascript
+<script src="https://cdn.jsdelivr.net/npm/imperative-html@0.1/dist/global/elements-strict.min.js"></script>
 ```
 
 ## Translation
@@ -167,10 +179,10 @@ div(HTML(`
 `))
 ```
 
-Finally, there's a separate helper script you can load that provides a function to translate from HTML to JavaScript:
+There's also a separate helper script you can load that provides a function to translate from HTML to JavaScript:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/imperative-html@0.0/dist/global/translator.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/imperative-html@0.1/dist/global/translator.min.js"></script>
 ```
 
 This script adds the function `translateElementsToImperativeCode()` to the global scope. You can pass either an HTML string or an instantiated element as the first argument, and optionally a whitespace indentation string as the second argument, and it'll return a string containing JavaScript code that would generate the same HTML:
@@ -195,7 +207,7 @@ npm install imperative-html
 The code is distributed in the [ES module format](https://nodejs.org/api/esm.html), and you can import it like this:
 
 ```javascript
-import {HTML, SVG} from "imperative-html";
+import {HTML, SVG, applyToElement} from "imperative-html";
 // or:
 import {HTML, SVG} from "imperative-html/dist/esm/elements-strict";
 import {translateElementsToImperativeCode} from "imperative-html/dist/esm/translator";
@@ -207,6 +219,6 @@ The NPM package includes type declarations for [TypeScript](https://www.typescri
 
 ## Internet Explorer Support
 
-*imperative-html* generally supports Internet Explorer, aside from custom element names [as noted above](#custom-elements). Future versions of *imperative-html* might not support Internet Explorer, but if you specify the current version number when you load the script [as instructed](#getting-started), then your page will continue to load this version and will be safe from breaking changes.
+*imperative-html* generally supports Internet Explorer, aside from custom element names [as noted above](#naming-convention). Future versions of *imperative-html* might not support Internet Explorer, but if you specify the current version number when you load the script [as instructed](#getting-started), then your page will continue to load this version and will be safe from breaking changes.
 
 Note that many features of modern JavaScript do not work in Internet Explorer, including features used in the code samples here, so if you need to support it, make sure to transpile your own code using something like [Babel](https://babeljs.io/) or [TypeScript](https://www.typescriptlang.org/). Fortunately, only about 2% of all internet traffic still comes from Internet Explorer at this time, so if you're not a commercial business and you're not sure if you need to worry about it, you probably don't. 
