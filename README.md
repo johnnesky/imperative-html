@@ -1,16 +1,16 @@
 
 # imperative-html
 
-*imperative-html* is a small JavaScript library for creating HTML (and SVG) elements in a web browser. It largely serves as a replacement for the standard [`document.createElement()` API](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement), allowing you to more easily create elements, assign attributes, and append children in a manner that resembles writing HTML but with JavaScript's syntax. 
+*imperative-html* is a small JavaScript library for creating HTML (and SVG) elements in a web browser. It improves on the standard [`document.createElement()` API](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement), allowing you to create elements, assign attributes, and append children in a manner that resembles writing HTML but with JavaScript's syntax. 
 
 For example, you could run this JavaScript expression:
 
 ```javascript
 section(
   h2("Title"),
+  img({src: "persuasive-diagram.png"}),
   p(
     "Claim. ",
-    img({src: "persuasive-diagram.png"}),
     a({href: "https://example.com"},
       "Link to supporting evidence. ",
     ),
@@ -24,9 +24,9 @@ And it would return a fully instantiated DOM element as if you had written:
 ```html
 <section>
   <h2>Title</h2>
+  <img src="persuasive-diagram.png"/>
   <p>
     Claim.
-    <img src="persuasive-diagram.png"/>
     <a href="https://example.com">
       Link to supporting evidence.
     </a>
@@ -41,7 +41,8 @@ It doesn't take long to get used to writing HTML elements in JavaScript like thi
   * [Getting Started](#getting-started)
   * [Adding to the DOM](#adding-to-the-dom)
   * [Arguments](#arguments)
-  * [Naming Convention](#naming-convention)
+  * [Naming Elements](#naming-elements)
+  * [Nesting Languages](#nesting-languages)
   * [Translation](#translation)
   * [NPM Support](#npm-support)
   * [TypeScript Support](#typescript-support)
@@ -65,7 +66,7 @@ div();      // returns <div></div>
 
 ## Adding to the DOM
 
-As the name *imperative-html* [implies](https://en.wikipedia.org/wiki/Imperative_programming), it's not enough to declare elements, unlike HTML. You must also tell the browser what to do with them. You probably want to append them to an existing element in the DOM, like:
+As the name *imperative-html* [implies](https://en.wikipedia.org/wiki/Imperative_programming), it's not enough to declare elements, unlike HTML. You must also tell the browser what to do with them. You probably want to append them to an existing element in the [DOM](https://www.w3schools.com/js/js_htmldom.asp), like:
 
 ```javascript
 document.body.appendChild(h1("Welcome."));
@@ -85,6 +86,8 @@ To make this easier, *imperative-html* also provides a function in the global sc
 </p>
 ```
 
+You can call `replaceScriptWith()` from inside another function—or even another file—as long as *imperative-html* is loaded first and `replaceScriptWith()` is only executed once per script element. This is useful for common widgets that you may want to reuse across multiple pages on your website.
+
 ## Arguments
 
 *imperative-html*'s element functions accept any number of arguments, and they will be appended as children to the new element in the provided order. If you pass string or number arguments, they will be converted to text nodes and appended. If you pass an array, everything in the array will be appended to the new element. If you pass a function, it will be called with no arguments and the result will be appended, which means you don't even need to put parentheses after a child element name if it's going to be empty:
@@ -99,39 +102,42 @@ p("Hello...", br, br, br, "...World!")
 div(
   "The first 10 squares are: ",
   function*() {
-    for (var i = 0; i < 10; i++) {
+    for (var i = 1; i <= 10; i++) {
       yield div(i * i);
     }
   },
 )
 ```
 
-If you pass a literal {object} as an argument, instead of being appended to the element as a child, it will be used for setting attributes on the new element. Write the attribute names and values as you would in HTML:
+If you pass a literal [{object}](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer) as an argument, instead of being appended to the element as a child, it will be used for setting attributes on the new element. Write the attribute names and values as you would in HTML:
 
 ```javascript
-div({class: "box", id: "primaryBox", "data-size": 10})
+label({class: "box", for: "usernameInput", "data-size": 100})
 ```
 
-The class attribute also accepts arrays of strings, the style attribute also accepts object literals, some attributes accept boolean values, and event handlers accept functions. 
+You can always use strings for attribute values, but you can also provide other types for some attributes. The class attribute accepts arrays, the style attribute accepts literal {objects}, some attributes accept boolean values, event handlers accept functions, and you can use numbers in place of strings as long as you don't need a unit like "px" at the end:
 
 ```javascript
-div({
-  class: ["box", "round"],
-  style: {background: "white"},
-  hidden: true,
+button({
+  class: ["primary", "round"],
+  style: {width: "100px", "line-height": 1.4},
+  autofocus: true,
   onclick: () => alert("Hi!"),
 })
 ```
 
-*imperative-html* also provides a global function to apply arguments in the same manner to existing elements:
+For convenience, *imperative-html* also provides a global function to apply additional arguments to existing elements in the same manner:
 
 ```javascript
-applyToElement(document.body, "Now you're in control!", {contenteditable: true});
+applyToElement(document.body,
+  {contenteditable: true},
+  "Now you're in control!",
+);
 ```
 
-## Naming Convention
+## Naming Elements
 
-All of the standard HTML and SVG element types are supported, and you can also create custom elements. Note that in HTML, [custom elements are supposed to have at least one hyphen in the name](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements), like `<my-element></my-element>`.  Unfortunately, JavaScript doesn't allow hyphens in names because they would be interpreted as a minus sign, so instead *imperative-html* allows you to use camelCase or snake_case symbols, and it will automatically convert them to kebab-case for you:
+All of the standard HTML and SVG element types are supported, and you can also create custom elements. Note that in HTML, [custom elements are supposed to have at least one hyphen in the name](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements), like `<my-element></my-element>`.  Unfortunately, JavaScript doesn't allow hyphens in names because they would be interpreted as minus signs, so instead *imperative-html* allows you to use camelCase or snake_case symbols, and it will automatically convert them to kebab-case for you:
 
 ```javascript
 HTML["my-element"](); // returns <my-element></my-element>
@@ -163,13 +169,13 @@ htmlVar(); // returns <var></var>
 SVG.switch(); // returns <switch></switch>
 ```
 
-Note that if your viewers are using Internet Explorer, using *imperative-html* to create custom elements will not work, nor will it gracefully degrade. If you want to support Internet Explorer, or you just want to receive error messages if you mistype an element name, you can instead load a strict version of *imperative-html* that does not include support for custom elements:
+Note that if your viewers are using Internet Explorer, attempting to create custom elements with *imperative-html* will not work, nor will it degrade gracefully. If you want to support Internet Explorer, or you just want to receive error messages if you mistype an element name, you can instead load a strict version of *imperative-html* that does not include support for custom elements:
 
-```javascript
+```html
 <script src="https://cdn.jsdelivr.net/npm/imperative-html@0.1/dist/global/elements-strict.min.js"></script>
 ```
 
-## Translation
+## Nesting Languages
 
 In some cases, you may find it easier to write HTML without converting it to JavaScript, but you are already *in* JavaScript. In that case, you can directly call the `HTML` symbol as a function and pass in text formatted as HTML. It will return a [DocumentFragment](https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment) that can be appended to any element:
 
@@ -179,7 +185,45 @@ div(HTML(`
 `))
 ```
 
-There's also a separate helper script you can load that provides a function to translate from HTML to JavaScript:
+This allows you to get around a limitation of HTML, which is that HTML documents are generally not allowed to load HTML fragments from other files. Using *imperative-html*, however, you can easily share common HTML code across multiple web pages, which could be useful in simple static websites. For example, you can write some HTML footer code in a JavaScript file, and then load it at the bottom of every page on your site like this:
+
+```javascript
+// footer.js
+replaceScriptWith(HTML(`
+  <footer>©20XX Your Name</footer>
+`));
+```
+
+```html
+<script src="/footer.js"></script>
+```
+
+It is even possible to go back and forth between languages, although you have to be careful about syntax and it's probably not very useful:
+
+```html
+<script>
+  // This whole script collapses into a text node!
+  replaceScriptWith(HTML(`
+    <script>
+      replaceScriptWith(
+        HTML.script(
+          "replaceScriptWith('We need to go deeper!');"
+        )
+      );
+    </scr` + /* avoid ending outer script early! */ `ipt>
+  `));
+</script>
+```
+
+## Translation
+
+Of course, if you ever want to convert elements that you created with *imperative-html* into a normal HTML string, you can always use [`.outerHTML`](https://developer.mozilla.org/en-US/docs/Web/API/Element/outerHTML):
+
+```javascript
+input({type: "checkbox"}).outerHTML; // returns <input type="checkbox">
+```
+
+There's also a separate helper script you can load that provides a function to translate from HTML to *imperative-html* code:
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/imperative-html@0.1/dist/global/translator.min.js"></script>
@@ -219,6 +263,6 @@ The NPM package includes type declarations for [TypeScript](https://www.typescri
 
 ## Internet Explorer Support
 
-*imperative-html* generally supports Internet Explorer, aside from custom element names [as noted above](#naming-convention). Future versions of *imperative-html* might not support Internet Explorer, but if you specify the current version number when you load the script [as instructed](#getting-started), then your page will continue to load this version and will be safe from breaking changes.
+*imperative-html* generally supports Internet Explorer, aside from custom element names [as noted above](#naming-elements). Future versions of *imperative-html* might not support Internet Explorer, but if you specify the current version number when you load the script [as instructed](#getting-started), then your page will continue to load this version and will be safe from breaking changes.
 
 Note that many features of modern JavaScript do not work in Internet Explorer, including features used in the code samples here, so if you need to support it, make sure to transpile your own code using something like [Babel](https://babeljs.io/) or [TypeScript](https://www.typescriptlang.org/). Fortunately, only about 2% of all internet traffic still comes from Internet Explorer at this time, so if you're not a commercial business and you're not sure if you need to worry about it, you probably don't. 
