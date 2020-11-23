@@ -42,7 +42,7 @@ It doesn't take long to get used to writing HTML elements in JavaScript like thi
   * [Adding to the DOM](#adding-to-the-dom)
   * [Arguments](#arguments)
   * [Naming Elements](#naming-elements)
-  * [Nesting Languages](#nesting-languages)
+  * [Nested Languages](#nested-languages)
   * [Translation](#translation)
   * [NPM Support](#npm-support)
   * [TypeScript Support](#typescript-support)
@@ -186,7 +186,7 @@ Note that if your viewers are using Internet Explorer, attempting to create cust
 <script src="https://cdn.jsdelivr.net/npm/imperative-html@0.1/dist/global/elements-strict.min.js"></script>
 ```
 
-## Nesting Languages
+## Nested Languages
 
 In some cases, you may find it easier to write HTML without converting it to JavaScript, but you are already *in* JavaScript. In that case, you can directly call the `HTML` symbol as a function and pass in text formatted as HTML. It will return a [DocumentFragment](https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment) that can be appended to any element:
 
