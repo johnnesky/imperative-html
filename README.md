@@ -79,14 +79,25 @@ To make this easier, *imperative-html* also provides a function in the global sc
   Welcome back,
   <script>
     replaceScriptWith(
-      img({src: "/avatar/" + username + ".jpg"}),
-      a({href: "/user/" + username}, displayName),
+      a({href: "/user/" + username},
+        img({src: "/avatar/" + username + ".jpg"}),
+        displayName,
+      ),
     );
   </script>
 </p>
 ```
 
-You can call `replaceScriptWith()` from inside another function—or even another file—as long as *imperative-html* is loaded first and `replaceScriptWith()` is only executed once per script element. This is useful for common widgets that you may want to reuse across multiple pages on your website.
+Of course, you can use JavaScript's powers of abstractions to define a reusable HTML widget inside a function and insert it wherever you want, like this:
+
+```html
+<p>
+  Welcome back,
+  <script>
+    replaceScriptWith(makeUserLink());
+  </script>
+</p>
+```
 
 ## Arguments
 
@@ -198,20 +209,22 @@ replaceScriptWith(HTML(`
 <script src="/footer.js"></script>
 ```
 
-It is even possible to go back and forth between languages, although you have to be careful about syntax and it's probably not very useful:
+It is also possible to continue alternating languages as you go deeper, although you have to be careful about syntax:
 
 ```html
 <script>
   // This whole script collapses into a text node!
-  replaceScriptWith(HTML(`
-    <script>
-      replaceScriptWith(
-        HTML.script(
-          "replaceScriptWith('We need to go deeper!');"
-        )
-      );
-    </scr` + /* avoid ending outer script early! */ `ipt>
-  `));
+  replaceScriptWith(
+    HTML(`
+      <script>
+        replaceScriptWith(
+          HTML.script(
+            "replaceScriptWith('We need to go deeper!');"
+          )
+        );
+      </scr` + /* avoid ending outer script early! */ `ipt>
+    `)
+  );
 </script>
 ```
 
