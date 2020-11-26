@@ -41,6 +41,7 @@ It doesn't take long to get used to writing HTML elements in JavaScript like thi
   * [Getting Started](#getting-started)
   * [Adding to the DOM](#adding-to-the-dom)
   * [Arguments](#arguments)
+  * [Updating Elements](#updating-elements)
   * [Naming Elements](#naming-elements)
   * [Nested Languages](#nested-languages)
   * [Translation](#translation)
@@ -137,12 +138,33 @@ button({
 })
 ```
 
-For convenience, *imperative-html* also provides a global function to apply additional arguments to existing elements in the same manner:
+## Updating Elements
+
+*imperative-html* provides the global function `applyToElement` for applying additional arguments to existing elements, following the same rules as above:
 
 ```javascript
 applyToElement(document.body,
   {contenteditable: true},
   "Now you're in control!",
+);
+```
+
+For the sake of simplicity, *imperative-html* does not come with any mechanism to automatically update the display in response to changes in your data model. However, if you know that an element will need to be updated, you can assign it to a variable:
+
+```javascript
+var counter = 0;
+var counterDisplay = span(counter);
+function increment() {
+  counter++;
+  counterDisplay.textContent = counter;
+}
+setInterval(increment, 1000);
+replaceScriptWith(
+  p(
+    "You have been looking at this page for ",
+    counterDisplay,
+    " seconds.",
+  ),
 );
 ```
 
@@ -227,6 +249,8 @@ It is also possible to continue alternating languages as you go deeper, although
   );
 </script>
 ```
+
+The `SVG` symbol can also be called as a function to convert SVG text to elements in the same way.
 
 ## Translation
 
