@@ -1,6 +1,6 @@
 {
 	"name": "imperative-html",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "Write HTML in client-side JavaScript.",
 	"author": "John Nesky",
 	"license": "MIT",
