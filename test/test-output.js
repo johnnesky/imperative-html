@@ -282,6 +282,12 @@ const strictElementsScript = fs.readFileSync("dist/global/elements-strict.min.js
 				`null, undefined, 0, /^.*$/, {}`,
 				`nullundefined0/^.*$/[object Object]`);
 		},
+		dataAttributeIsAccessible: async function() {
+			assert.equal(
+				await page.evaluate(() => HTML.div({"data-test": "hello"}).dataset.test),
+				"hello"
+			);
+		},
 		svgElements: async function() {
 			await assertExpressionOutput(
 				`SVG.svg({viewBox: "0 0 1 1"}, SVG.circle({cx: 0, cy: 0, r: 1, fill: "black"}))`,
@@ -376,7 +382,12 @@ const strictElementsScript = fs.readFileSync("dist/global/elements-strict.min.js
 			await assertExpressionOutput(
 				`HTML.div(HTML.select(HTML.option("File")))`,
 				`<div><select><option>File</option></select></div>`);
-		}
+		},
+		canDeeplyNestHTML: async function () {
+			await assertExpressionOutput(
+				`HTML("<p><script>replaceScriptWith(HTML('hello'))</scr"+"ipt></p>")`,
+				`<p>hello</p>`);
+		},
 	};
 	
 	const consoleRed = "\x1b[31m";

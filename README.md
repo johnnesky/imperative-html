@@ -48,6 +48,7 @@ It doesn't take long to get used to writing HTML elements in JavaScript like thi
   * [NPM Support](#npm-support)
   * [TypeScript Support](#typescript-support)
   * [Internet Explorer Support](#internet-explorer-support)
+  * [About](#about)
 
 ## Getting Started
 
@@ -303,3 +304,9 @@ The NPM package includes type declarations for [TypeScript](https://www.typescri
 *imperative-html* generally supports Internet Explorer, aside from custom element names [as noted above](#naming-elements). Future versions of *imperative-html* might not support Internet Explorer, but if you specify the current version number when you load the script [as instructed](#getting-started), then your page will continue to load this version and will be safe from breaking changes.
 
 Note that many features of modern JavaScript do not work in Internet Explorer, including features used in the code samples here, so if you need to support it, make sure to transpile your own code using something like [Babel](https://babeljs.io/) or [TypeScript](https://www.typescriptlang.org/). Fortunately, only about 2% of all internet traffic still comes from Internet Explorer at this time, so if you're not a commercial business and you're not sure if you need to worry about it, you probably don't. 
+
+## About
+
+I originally created this library as part of my [BeepBox](https://github.com/johnnesky/beepbox) project, but I found it so useful, I wanted to be able to use it in other projects too. Frankly, something like it ought to be a standard JavaScript library, so I decided to clean it up, add testing and documentation, and publish it for all to use.
+
+If you find *imperative-html* valuable and have the means, any gratuity via [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=QZJTX9GRYEV9N&currency_code=USD) would be appreciated!
