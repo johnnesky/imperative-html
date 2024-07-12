@@ -1,4 +1,4 @@
-// Copyright (C) 2020 John Nesky, distributed under the MIT license.
+// Copyright (C) John Nesky, distributed under the MIT license.
 
 // Simplified, but covers most cases I care about:
 const validJavascriptIdentifier: RegExp = /^[a-z][a-zA-z0-9_]*$/;

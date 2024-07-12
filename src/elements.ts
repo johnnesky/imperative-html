@@ -1,6 +1,6 @@
-// Copyright (C) 2020 John Nesky, distributed under the MIT license.
+// Copyright (C) John Nesky, distributed under the MIT license.
 
-import {applyElementArgs, svgNS, parseHTML, parseSVG, replaceScriptWith, applyToElement} from "./elements-base";
+import {applyElementArgs, svgNS, parseHTML, parseSVG, replaceScriptWith, applyToElement} from "./elements-base.js";
 export {replaceScriptWith, applyToElement};
 
 interface HTMLElementFactory {

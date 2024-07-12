@@ -1,4 +1,4 @@
-// Copyright (C) 2020 John Nesky, distributed under the MIT license.
+// Copyright (C) John Nesky, distributed under the MIT license.
 
 export function applyElementArgs<T extends HTMLElement | SVGElement | DocumentFragment>(element: T, args: Array<any>): T {
 	for (const arg of args) {

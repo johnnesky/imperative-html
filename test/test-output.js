@@ -1,6 +1,6 @@
-const puppeteer = require("puppeteer");
-const assert = require("assert").strict;
-const fs = require("fs");
+import puppeteer from 'puppeteer';
+import {strict as assert} from "assert";
+import * as fs from "fs";
 
 const elementsScript = fs.readFileSync("dist/global/elements.min.js", "utf8");
 const strictElementsScript = fs.readFileSync("dist/global/elements-strict.min.js", "utf8");

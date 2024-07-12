@@ -6,33 +6,25 @@
 For example, you could run this JavaScript expression:
 
 ```javascript
-section(
-  h2("Title"),
-  img({src: "persuasive-diagram.png"}),
-  p(
-    "Claim. ",
-    a({href: "https://example.com"},
-      "Link to supporting evidence. ",
-    ),
-    "Conclusion. ",
+p(
+  "Claim. ",
+  a({href: "https://example.com"},
+    "Link to supporting evidence. ",
   ),
-)
+  "Conclusion. ",
+),
 ```
 
 And it would return a fully instantiated DOM element as if you had written:
 
 ```html
-<section>
-  <h2>Title</h2>
-  <img src="persuasive-diagram.png"/>
-  <p>
-    Claim.
-    <a href="https://example.com">
-      Link to supporting evidence.
-    </a>
-    Conclusion.
-  </p>
-</section>
+<p>
+  Claim.
+  <a href="https://example.com">
+    Link to supporting evidence.
+  </a>
+  Conclusion.
+</p>
 ```
 
 It doesn't take long to get used to writing HTML elements in JavaScript like this, and the advantage is that you can use all of JavaScript's language features to automate stuff that would be difficult to write by hand.
@@ -90,7 +82,7 @@ To make this easier, *imperative-html* also provides a function in the global sc
 </p>
 ```
 
-Of course, you can use JavaScript's powers of abstractions to define a reusable HTML widget inside a function and insert it wherever you want, like this:
+Of course, you can use JavaScript's powers of abstraction to define a reusable HTML widget inside a function and insert it wherever you want, like this:
 
 ```html
 <p>
@@ -258,7 +250,7 @@ The `SVG` symbol can also be called as a function to convert SVG text to element
 Of course, if you ever want to convert elements that you created with *imperative-html* into a normal HTML string, you can always use [`.outerHTML`](https://developer.mozilla.org/en-US/docs/Web/API/Element/outerHTML):
 
 ```javascript
-input({type: "checkbox"}).outerHTML; // returns <input type="checkbox">
+input({type: "checkbox"}).outerHTML; // returns '<input type="checkbox">'
 ```
 
 There's also a separate helper script you can load that provides a function to translate from HTML to *imperative-html* code:
